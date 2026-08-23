@@ -18,7 +18,7 @@ contract SimpleStorage{
 // now say you want to actually have an array of people
 Person[] public ListOfPeople; // this right here helps us do just that, create a lists or an array for person permiting person to be able to add other peple like we will do.
 
-        
+       mapping (string=>uint256) public nameToFavoriteNumber; // a beter way of storing data in arrays by mapping something to something
 // Noting there are 2 states of functions, a function 
 //that is actively changing the state of the blockchain, 
 //that is updating and doing a transaction, etc for example
@@ -46,5 +46,6 @@ Person[] public ListOfPeople; // this right here helps us do just that, create a
 
     function AddPerson(string memory _name, uint256 _favoriteNumber )public  {
             ListOfPeople.push(Person(_favoriteNumber, _name));
+            nameToFavoriteNumber[_name]= _favoriteNumber;
     }
 }
