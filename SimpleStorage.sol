@@ -28,7 +28,7 @@ Person[] public ListOfPeople; // this right here helps us do just that, create a
 // blockvhain for example our retrieve function will be blue on the deploy tab
 
 
-    function store(uint256 _favoriteNumber) public {
+    function store(uint256 _favoriteNumber) public virtual {// this virtual keyword permits this function to be used in another function of another completely differnt child function 
             myFavoriteNumber =  _favoriteNumber;
     }
 // again a function can be in a view or pure state, view means it
