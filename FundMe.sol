@@ -33,9 +33,14 @@ contract FundMe{
     //Target allow users to be able to send money
     // set a minimum amount to fund
 
+    address[] public funders;  // to store our funders details in an array
+    mapping (address funder => uint256 amountFunded) public addressToAmountFunded ;
     function fund()  public payable {// the payable key word allows the contyract to look red in our contract ==> it is a payable function 
     //require(msg.value > 1e18, "Can't send due to insuffecient ETH"); //1e18 = 1e18wei ==> 100000000000000000 <=> 10^18wei ==> 1ETH
     require(getConvertionRate(msg.value) > 1e18, "Can't send due to insuffecient ETH"); //===> this line checks for the minimum amount to be sent to be exactly above 5$
+    funders.push(msg.sender);
+    addressToAmountFunded[msg.sender] = addressToAmountFunded[msg.sender] + msg.value;
+
     }
 
     //function withdraw() public {}
