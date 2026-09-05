@@ -29,13 +29,13 @@ import {AggregatorV3Interface} from "@chainlink/contracts/src/v0.8/shared/interf
 
 contract FundMe{
 
-    uint256 minimumUsd = 5;
+    uint256 minimumUsd = 5 * 1e18;
     //Target allow users to be able to send money
     // set a minimum amount to fund
 
     function fund()  public payable {// the payable key word allows the contyract to look red in our contract ==> it is a payable function 
-    require(msg.value > 1e18, "Can't send due to insuffecient ETH"); //1e18 = 1e18wei ==> 100000000000000000 <=> 10^18wei ==> 1ETH
-
+    //require(msg.value > 1e18, "Can't send due to insuffecient ETH"); //1e18 = 1e18wei ==> 100000000000000000 <=> 10^18wei ==> 1ETH
+    require(getConvertionRate(msg.value) > 1e18, "Can't send due to insuffecient ETH"); //===> this line checks for the minimum amount to be sent to be exactly above 5$
     }
 
     //function withdraw() public {}
@@ -49,8 +49,11 @@ contract FundMe{
     return uint256(price * 1e10);
     }
 
-    function getConvertionRate() public {
+    function getConvertionRate(uint256 ethAmount) public view returns (uint256) {
 
+       uint256 ethPrice = getPrice();
+       uint256 ethAmountInUsd = (ethPrice * ethAmount) / 1e18; //In solidity it is important to multiply before you divide.
+       return ethAmountInUsd;
 
     }
 
