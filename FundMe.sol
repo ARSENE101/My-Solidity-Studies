@@ -53,6 +53,20 @@ contract FundMe{
 
         }
 
+        //reset the array 
+        funders = new address[](0);
+        //withdraw has 3 different ways ==> transfer, send, call.
+        //transfer; the problem with transfer is if it fails it will error and revert the transaction with 2300 gas consumed.
+        // payable (msg.sender).transfer(address(this).balance); // msg.sender is of type address but we need it to be of type payable
+
+        // //send; this consumes 2300 gas fee as well but when it fails it returns a boolean.
+
+        // bool sendSuccess = payable (msg.sender).send(address(this).balance);
+        // require(sendSuccess, "send failed ");
+
+        //call in our situation call will be our recomended way
+        (bool callSuccess, bytes memory dataReturned) = payable (msg.sender).call{value: address (this).balance}("");
+          require(callSuccess, "call failed");
     }
 
 
