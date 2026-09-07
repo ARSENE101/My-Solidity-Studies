@@ -40,7 +40,18 @@ contract FundMe{
     require(msg.value.getConvertionRate() > 1e18, "Can't send due to insuffecient ETH"); //1e18 = 1e18wei ==> 100000000000000000 <=> 10^18wei ==> 1ETH
     //require(getConvertionRate(msg.value) > 1e18, "Can't send due to insuffecient ETH"); //===> this line checks for the minimum amount to be sent to be exactly above 5$
     funders.push(msg.sender);
-    addressToAmountFunded[msg.sender] = addressToAmountFunded[msg.sender] + msg.value;
+    addressToAmountFunded[msg.sender] += msg.value; // addressToAmountFunded[msg.sender] + msg.value <==> addressToAmountFunded[msg.sender] + msg.value
+
+    }
+
+    function withdraw() public {
+
+        for (uint256 funderIndex = 0 ; funderIndex < funders.length; funderIndex++){
+
+          address funder = funders[funderIndex];
+          addressToAmountFunded[funder] = 0;
+
+        }
 
     }
 
