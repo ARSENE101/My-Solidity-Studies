@@ -36,6 +36,16 @@ contract FundMe{
 
     address[] public funders;  // to store our funders details in an array
     mapping (address funder => uint256 amountFunded) public addressToAmountFunded ;
+
+    address public owner;
+
+    constructor () {
+      minimumUsd = 2;
+
+
+    }
+
+
     function fund()  public payable {// the payable key word allows the contyract to look red in our contract ==> it is a payable function 
     require(msg.value.getConvertionRate() > 1e18, "Can't send due to insuffecient ETH"); //1e18 = 1e18wei ==> 100000000000000000 <=> 10^18wei ==> 1ETH
     //require(getConvertionRate(msg.value) > 1e18, "Can't send due to insuffecient ETH"); //===> this line checks for the minimum amount to be sent to be exactly above 5$
@@ -44,8 +54,11 @@ contract FundMe{
 
     }
 
+
+
     function withdraw() public {
 
+        require(msg.sender == owner, "Only the owner can withdraw");
         for (uint256 funderIndex = 0 ; funderIndex < funders.length; funderIndex++){
 
           address funder = funders[funderIndex];
