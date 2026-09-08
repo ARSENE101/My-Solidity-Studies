@@ -30,24 +30,24 @@ import {PriceConverter} from "./PriceConverter.sol";
 
 contract FundMe{
     using PriceConverter for uint256;
-    uint256 minimumUsd = 5 * 1e18;
+    uint256 public constant MINIMUM_USD = 50 * 1e18; // using the constant key word saves gas as storage is not in use as much 
     //Target allow users to be able to send money
     // set a minimum amount to fund
 
     address[] public funders;  // to store our funders details in an array
     mapping (address funder => uint256 amountFunded) public addressToAmountFunded ;
 
-    address public owner;
+    address public immutable i_owner;//immutable is different from constants as it can be accessed outside the function 
 
     constructor () {
-      minimumUsd = 2;
+      i_owner = msg.sender;
 
 
     }
 
 
     function fund()  public payable {// the payable key word allows the contyract to look red in our contract ==> it is a payable function 
-    require(msg.value.getConvertionRate() > 1e18, "Can't send due to insuffecient ETH"); //1e18 = 1e18wei ==> 100000000000000000 <=> 10^18wei ==> 1ETH
+    require(msg.value.getConvertionRate() >= MINIMUM_USD, "Can't send due to insuffecient ETH"); //1e18 = 1e18wei ==> 100000000000000000 <=> 10^18wei ==> 1ETH
     //require(getConvertionRate(msg.value) > 1e18, "Can't send due to insuffecient ETH"); //===> this line checks for the minimum amount to be sent to be exactly above 5$
     funders.push(msg.sender);
     addressToAmountFunded[msg.sender] += msg.value; // addressToAmountFunded[msg.sender] + msg.value <==> addressToAmountFunded[msg.sender] + msg.value
@@ -84,7 +84,7 @@ contract FundMe{
 
     //Modifier are keywords we could add to a fun ction to increase efficiency and functionality.
      modifier onlyOwner() {
-        require(msg.sender == owner, "only owner can call this function");
+        require(msg.sender == i_owner, "only owner can call this function");
         _; //this is a placeholder for the rest of the function
     }
 
