@@ -56,9 +56,8 @@ contract FundMe{
 
 
 
-    function withdraw() public {
+    function withdraw() public onlyOwner {
 
-        require(msg.sender == owner, "Only the owner can withdraw");
         for (uint256 funderIndex = 0 ; funderIndex < funders.length; funderIndex++){
 
           address funder = funders[funderIndex];
@@ -81,6 +80,14 @@ contract FundMe{
         (bool callSuccess, bytes memory dataReturned) = payable (msg.sender).call{value: address (this).balance}("");
           require(callSuccess, "call failed");
     }
+
+
+    //Modifier are keywords we could add to a fun ction to increase efficiency and functionality.
+     modifier onlyOwner() {
+        require(msg.sender == owner, "only owner can call this function");
+        _; //this is a placeholder for the rest of the function
+    }
+
 
 
 }
