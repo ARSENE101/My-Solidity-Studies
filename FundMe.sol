@@ -27,6 +27,7 @@ import {PriceConverter} from "./PriceConverter.sol";
 
 
 // the agregator code 
+error NotOwner();
 
 contract FundMe{
     using PriceConverter for uint256;
@@ -84,8 +85,11 @@ contract FundMe{
 
     //Modifier are keywords we could add to a fun ction to increase efficiency and functionality.
      modifier onlyOwner() {
-        require(msg.sender == i_owner, "only owner can call this function");
-        _; //this is a placeholder for the rest of the function
+        //require(msg.sender == i_owner, "only owner can call this function");
+         //this is a placeholder for the rest of the function
+        if (msg.sender != i_owner) {
+            revert NotOwner();
+        }_;
     }
 
 
