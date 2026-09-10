@@ -83,7 +83,7 @@ contract FundMe{
     }
 
 
-    //Modifier are keywords we could add to a fun ction to increase efficiency and functionality.
+    //Modifier are keywords we could add to a function to increase efficiency and functionality.
      modifier onlyOwner() {
         //require(msg.sender == i_owner, "only owner can call this function");
          //this is a placeholder for the rest of the function
@@ -92,6 +92,20 @@ contract FundMe{
         }_;
     }
 
+      // What happens when a funstion such as fund me is  called outside the contract or someone tries to fund the adress using different means ==> receive and fallback are special functions that handle that
 
+
+      receive() external payable {   // now anyone that tries to fund us without using our contract will be directed tp ouer fund function 
+
+        fund();
+
+       }
+
+
+      fallback() external payable {  // this happens if receivable fails hence fallback.
+
+        fund();
+
+      }
 
 }
